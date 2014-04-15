@@ -1,3 +1,5 @@
+require 'pp'
+
 module Shorty
   class App
 
@@ -26,7 +28,16 @@ module Shorty
 
     def call(env)
       request = Rack::Request.new(env)
-      [ 201, { }, '/' ]
+      if request.request_method == 'POST'
+        status = 200
+      else
+        if request.path_info == "/where_does_this_go"
+          status = 404
+        else
+          status = 302
+        end
+      end
+      [status, {"Content-type" => "text/plain", "Location" => "http://foobar.com/stuff"}, "http://" + env["SERVER_NAME"] + "/bd58b53a"]
     end
     
   end
